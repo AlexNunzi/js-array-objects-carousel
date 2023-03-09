@@ -22,11 +22,19 @@ const imgArray = [
     }
 ];
 
+
+//  RECUPERO INFORMAZIONI DAL DOM
 const imgListDom = document.querySelector('.imgList');
 const miniaturesContainerDom = document.querySelector('.miniaturesContainer');
-let sliderImg = '';
-let miniatureImg = '';
+const upDom = document.querySelector('#up');
+const downDom = document.querySelector('#down');
+const forwardDom = document.getElementById('forward');
+const backwardDom = document.getElementById('backward');
+const stopDom = document.getElementById('stop');
 
+
+// Creazione degli elementi contenenti immagini e relative informazioni nel
+// carosello e nella zona delle miniature
 for (let i = 0; i < imgArray.length; i++) {
     const newImgWrapper = document.createElement('div');
     newImgWrapper.classList.add('imgWrapper');
@@ -53,9 +61,7 @@ for (let i = 0; i < imgArray.length; i++) {
 const imgWrappersDom = document.getElementsByClassName('imgWrapper');
 const miniatureDom = document.getElementsByClassName('miniature');
 
-console.log(imgWrappersDom);
-console.log(miniatureDom);
-
+//  CONTATORE DELLA POSIZIONE CORRENTE NEL CAROSELLO
 let selectedImg = 0;
 
 imgWrappersDom[selectedImg].classList.add('show');
@@ -63,50 +69,111 @@ miniatureDom[selectedImg].classList.remove('overlay');
 miniatureDom[selectedImg].classList.add('selectedMiniature');
 
 
-const upDom = document.querySelector('#up');
-const downDom = document.querySelector('#down');
 
+
+
+//   PULSANTE AVANTI
 downDom.addEventListener('click', function(){
-    if (selectedImg < imgWrappersDom.length - 1) {
-        imgWrappersDom[selectedImg].classList.remove('show');
-        miniatureDom[selectedImg].classList.add('overlay');
-        miniatureDom[selectedImg].classList.remove('selectedMiniature');
-        selectedImg++;
-        imgWrappersDom[selectedImg].classList.add('show');
-        miniatureDom[selectedImg].classList.remove('overlay');
-        miniatureDom[selectedImg].classList.add('selectedMiniature');
+    clearInterval(forwardLoop);
+    clearInterval(backwardLoop);
+    stopDom.classList.add('d-none');
+    stopDom.classList.remove('d-flex');
+    selectedImg = goNext(selectedImg);
+});
+
+//  PULSANTE INDIETRO
+upDom.addEventListener('click', function(){
+    clearInterval(forwardLoop);
+    clearInterval(backwardLoop);
+    stopDom.classList.add('d-none');
+    stopDom.classList.remove('d-flex');
+    selectedImg = goPrevious(selectedImg);
+});
+
+//  PULSANTE AUTOPLAY AVANTI
+forwardDom.addEventListener('click', function(){
+    clearInterval(backwardLoop);
+    stopDom.classList.remove('d-none');
+    stopDom.classList.add('d-flex');
+    forwardLoop = setInterval(function(){
+        selectedImg = goNext(selectedImg);
+    }, 3000);
+
+});
+
+//  PULSANTE AUTOPLAY INDIETRO
+backwardDom.addEventListener('click', function(){
+    clearInterval(forwardLoop);
+    stopDom.classList.remove('d-none');
+    stopDom.classList.add('d-flex');
+    backwardLoop = setInterval(function(){
+        selectedImg = goPrevious(selectedImg);
+    }, 3000);
+
+});
+
+//  PULSANTE STOP AUTOPLAY
+stopDom.addEventListener('click', function(){
+    stopDom.classList.add('d-none');
+    stopDom.classList.remove('d-flex');
+    clearInterval(forwardLoop);
+    clearInterval(backwardLoop);
+})
+
+
+
+
+//  FUNZIONI
+let forwardLoop;
+
+let backwardLoop;
+
+
+function goNext(currentImg){
+    let counter = currentImg;
+    if (counter < imgWrappersDom.length - 1) {
+        imgWrappersDom[counter].classList.remove('show');
+        miniatureDom[counter].classList.add('overlay');
+        miniatureDom[counter].classList.remove('selectedMiniature');
+        counter++;
+        imgWrappersDom[counter].classList.add('show');
+        miniatureDom[counter].classList.remove('overlay');
+        miniatureDom[counter].classList.add('selectedMiniature');
         upDom.classList.remove('hide');
 
-    } else if (selectedImg == imgWrappersDom.length -1){
-        imgWrappersDom[selectedImg].classList.remove('show');
-        miniatureDom[selectedImg].classList.add('overlay');
-        miniatureDom[selectedImg].classList.remove('selectedMiniature');
-        selectedImg = 0;
-        imgWrappersDom[selectedImg].classList.add('show');
-        miniatureDom[selectedImg].classList.remove('overlay');
-        miniatureDom[selectedImg].classList.add('selectedMiniature');
+    } else if (counter == imgWrappersDom.length -1){
+        imgWrappersDom[counter].classList.remove('show');
+        miniatureDom[counter].classList.add('overlay');
+        miniatureDom[counter].classList.remove('selectedMiniature');
+        counter = 0;
+        imgWrappersDom[counter].classList.add('show');
+        miniatureDom[counter].classList.remove('overlay');
+        miniatureDom[counter].classList.add('selectedMiniature');
     }
-});
+    return counter;
+}
 
-
-upDom.addEventListener('click', function(){
-    if (selectedImg > 0) {
-        imgWrappersDom[selectedImg].classList.remove('show');
-        miniatureDom[selectedImg].classList.add('overlay');
-        miniatureDom[selectedImg].classList.remove('selectedMiniature');
-        selectedImg--;
-        imgWrappersDom[selectedImg].classList.add('show');
-        miniatureDom[selectedImg].classList.remove('overlay');
-        miniatureDom[selectedImg].classList.add('selectedMiniature');
+function goPrevious(currentImg){
+    let counter = currentImg;
+    if (counter > 0) {
+        imgWrappersDom[counter].classList.remove('show');
+        miniatureDom[counter].classList.add('overlay');
+        miniatureDom[counter].classList.remove('selectedMiniature');
+        counter--;
+        imgWrappersDom[counter].classList.add('show');
+        miniatureDom[counter].classList.remove('overlay');
+        miniatureDom[counter].classList.add('selectedMiniature');
         downDom.classList.remove('hide');
 
-    } else if (selectedImg == 0) {
-        imgWrappersDom[selectedImg].classList.remove('show');
-        miniatureDom[selectedImg].classList.add('overlay');
-        miniatureDom[selectedImg].classList.remove('selectedMiniature');
-        selectedImg = (imgWrappersDom.length - 1);
-        imgWrappersDom[selectedImg].classList.add('show');
-        miniatureDom[selectedImg].classList.remove('overlay');
-        miniatureDom[selectedImg].classList.add('selectedMiniature');
+    } else if (counter == 0) {
+        imgWrappersDom[counter].classList.remove('show');
+        miniatureDom[counter].classList.add('overlay');
+        miniatureDom[counter].classList.remove('selectedMiniature');
+        counter = (imgWrappersDom.length - 1);
+        imgWrappersDom[counter].classList.add('show');
+        miniatureDom[counter].classList.remove('overlay');
+        miniatureDom[counter].classList.add('selectedMiniature');
     }
-});
+    return counter;
+}
+

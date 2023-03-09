@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+.d-none{
+    display: none;
+}
+
+.d-flex{
+    display: flex;
+}
+
 .container {
     width: 70vw;
     margin: auto;
@@ -18,6 +26,7 @@
 }
 
 .imgList {
+    position: relative;
     width: 80%;
     height: 100%;
 }
@@ -78,6 +87,32 @@
     border-radius: 50%;
     cursor: pointer;
     z-index: 100;
+}
+
+.loop{
+    position: absolute;
+    top: 5px;
+    background-color: #cccccc;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;    
+}
+
+#forward{
+    left: calc(50% + 30px);
+}
+
+#backward{
+    left: calc(50% - 30px);
+}
+
+#stop{
+    left: 50%;
 }
 
 .hide{
