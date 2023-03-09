@@ -32,6 +32,8 @@ const forwardDom = document.getElementById('forward');
 const backwardDom = document.getElementById('backward');
 const stopDom = document.getElementById('stop');
 
+//  CONTATORE DELLA POSIZIONE CORRENTE NEL CAROSELLO
+let selectedImg = 0;
 
 // Creazione degli elementi contenenti immagini e relative informazioni nel
 // carosello e nella zona delle miniature
@@ -50,6 +52,9 @@ for (let i = 0; i < imgArray.length; i++) {
     const newMiniature = document.createElement('div');
     newMiniature.classList.add('miniature');
     newMiniature.classList.add('overlay');
+    newMiniature.addEventListener('click', function(){
+        selectedImg = selectOnClick(i, selectedImg);
+    });
     newMiniature.innerHTML += `<img src="${imgArray[i].image}" alt="Wallpaper">`
 
     imgListDom.append(newImgWrapper);
@@ -60,9 +65,6 @@ for (let i = 0; i < imgArray.length; i++) {
 
 const imgWrappersDom = document.getElementsByClassName('imgWrapper');
 const miniatureDom = document.getElementsByClassName('miniature');
-
-//  CONTATORE DELLA POSIZIONE CORRENTE NEL CAROSELLO
-let selectedImg = 0;
 
 imgWrappersDom[selectedImg].classList.add('show');
 miniatureDom[selectedImg].classList.remove('overlay');
@@ -128,7 +130,7 @@ let forwardLoop;
 
 let backwardLoop;
 
-
+//  FUNZIONE PER PASSARE ALLA PROSSIMA IMMAGINE
 function goNext(currentImg){
     let counter = currentImg;
     if (counter < imgWrappersDom.length - 1) {
@@ -153,6 +155,7 @@ function goNext(currentImg){
     return counter;
 }
 
+//  FUNZIONE PER TORNARE ALL'IMMAGINE PRECEDENTE
 function goPrevious(currentImg){
     let counter = currentImg;
     if (counter > 0) {
@@ -177,3 +180,19 @@ function goPrevious(currentImg){
     return counter;
 }
 
+//  FUNZIONE DI SELEZIONE DELL'IMMAGINE TRAMITE CLICK
+function selectOnClick(target, currentSelect){
+    clearInterval(forwardLoop);
+    clearInterval(backwardLoop);
+    stopDom.classList.add('d-none');
+    stopDom.classList.remove('d-flex');
+    let counter = currentSelect;
+    imgWrappersDom[counter].classList.remove('show');
+    miniatureDom[counter].classList.add('overlay');
+    miniatureDom[counter].classList.remove('selectedMiniature');
+    counter = target;
+    imgWrappersDom[counter].classList.add('show');
+    miniatureDom[counter].classList.remove('overlay');
+    miniatureDom[counter].classList.add('selectedMiniature');
+    return counter;
+}
