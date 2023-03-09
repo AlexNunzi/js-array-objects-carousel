@@ -30,7 +30,13 @@ let miniatureImg = '';
 for (let i = 0; i < imgArray.length; i++) {
     const newImgWrapper = document.createElement('div');
     newImgWrapper.classList.add('imgWrapper');
-    newImgWrapper.innerHTML += `<img class="img" src="${imgArray[i].image}" alt="Wallpaper">`;
+    newImgWrapper.innerHTML += `
+    <img class="img" src="${imgArray[i].image}" alt="Wallpaper">
+    <div class="imgDescription">
+        <h2>${imgArray[i].title}</h2>
+        <p>${imgArray[i].text}</p>
+    </div>
+    `;
 
 
     const newMiniature = document.createElement('div');
