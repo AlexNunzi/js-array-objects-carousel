@@ -76,8 +76,7 @@ miniatureDom[selectedImg].classList.add('selectedMiniature');
 
 //   PULSANTE AVANTI
 downDom.addEventListener('click', function(){
-    clearInterval(forwardLoop);
-    clearInterval(backwardLoop);
+    clearAutoplay();
     stopDom.classList.add('d-none');
     stopDom.classList.remove('d-flex');
     selectedImg = goNext(selectedImg);
@@ -85,8 +84,7 @@ downDom.addEventListener('click', function(){
 
 //  PULSANTE INDIETRO
 upDom.addEventListener('click', function(){
-    clearInterval(forwardLoop);
-    clearInterval(backwardLoop);
+    clearAutoplay();
     stopDom.classList.add('d-none');
     stopDom.classList.remove('d-flex');
     selectedImg = goPrevious(selectedImg);
@@ -94,23 +92,23 @@ upDom.addEventListener('click', function(){
 
 //  PULSANTE AUTOPLAY AVANTI
 forwardDom.addEventListener('click', function(){
-    clearInterval(backwardLoop);
+    clearAutoplay();
     stopDom.classList.remove('d-none');
     stopDom.classList.add('d-flex');
     forwardLoop = setInterval(function(){
         selectedImg = goNext(selectedImg);
-    }, 3000);
+    }, 1000);
 
 });
 
 //  PULSANTE AUTOPLAY INDIETRO
 backwardDom.addEventListener('click', function(){
-    clearInterval(forwardLoop);
+    clearAutoplay();
     stopDom.classList.remove('d-none');
     stopDom.classList.add('d-flex');
     backwardLoop = setInterval(function(){
         selectedImg = goPrevious(selectedImg);
-    }, 3000);
+    }, 1000);
 
 });
 
@@ -118,8 +116,7 @@ backwardDom.addEventListener('click', function(){
 stopDom.addEventListener('click', function(){
     stopDom.classList.add('d-none');
     stopDom.classList.remove('d-flex');
-    clearInterval(forwardLoop);
-    clearInterval(backwardLoop);
+    clearAutoplay();
 })
 
 
@@ -129,6 +126,12 @@ stopDom.addEventListener('click', function(){
 let forwardLoop;
 
 let backwardLoop;
+
+//  PULIZIA DEGLI AUTOPLAY
+function clearAutoplay(){
+    clearInterval(forwardLoop);
+    clearInterval(backwardLoop);
+}
 
 //  FUNZIONE PER PASSARE ALLA PROSSIMA IMMAGINE
 function goNext(currentImg){
@@ -182,8 +185,7 @@ function goPrevious(currentImg){
 
 //  FUNZIONE DI SELEZIONE DELL'IMMAGINE TRAMITE CLICK
 function selectOnClick(target, currentSelect){
-    clearInterval(forwardLoop);
-    clearInterval(backwardLoop);
+    clearAutoplay();
     stopDom.classList.add('d-none');
     stopDom.classList.remove('d-flex');
     let counter = currentSelect;
